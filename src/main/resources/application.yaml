@@ -1,0 +1,20 @@
+spring:
+  # Application
+  application:
+    name: myschool
+
+  # Datasource
+  datasource:
+    url: jdbc:postgresql://localhost:5432/myschool_db
+    username: myschool
+    password: passwordForMyschool
+
+  # JPA
+  spring:
+    hibernate:
+      dll-auto: update
+    show-sql: true
+
+# Server
+server:
+  port: 8080

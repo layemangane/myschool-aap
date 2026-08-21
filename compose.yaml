@@ -1,0 +1,30 @@
+# docker-compose.yml
+services:
+  myschool-db:
+    image: postgres:18
+    environment:
+      POSTGRES_DB: myschool_db
+      POSTGRES_USER: myschool
+      POSTGRES_PASSWORD: passwordForMyschool
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres_myschool_data:/var/lib/postgresql
+
+  myschool-app:
+    build: .
+    ports:
+      - "8080:8080"
+    environment:
+      SPRING_DATASOURCE_URL: jdbc:postgresql://myschool-db:5432/myschool_db
+      SPRING_DATASOURCE_USERNAME: myschool
+      SPRING_DATASOURCE_PASSWORD: passwordForMyschool
+    depends_on:
+      - myschool-db
+    develop:
+      watch:
+        - action: rebuild
+          path: .
+
+volumes:
+  postgres_myschool_data:
