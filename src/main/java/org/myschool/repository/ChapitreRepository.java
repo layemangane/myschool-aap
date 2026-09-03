@@ -14,4 +14,6 @@ public interface ChapitreRepository extends JpaRepository<Chapitre, Long> {
 
     List<Chapitre> findByEstGratuitTrue();
 
+    List<Chapitre> findByMatiereId(Long matiereId);
+
 }

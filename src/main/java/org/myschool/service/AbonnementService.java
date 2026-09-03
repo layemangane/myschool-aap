@@ -1,6 +1,8 @@
 package org.myschool.service;
 
 import org.myschool.entity.*;
+import org.myschool.exception.BusinessRuleException;
+import org.myschool.exception.ResourceNotFoundException;
 import org.myschool.enumeration.MoyenPaiement;
 import org.myschool.enumeration.StatutAbonnement;
 import org.myschool.enumeration.StatutPaiement;
@@ -36,7 +38,7 @@ public class AbonnementService {
 
     public Abonnement findAbonnementById(Long id) {
         return abonnementRepository.findById(id)
-                .orElseThrow(() -> new IllegalArgumentException("Abonnement introuvable !"));
+                .orElseThrow(() -> new ResourceNotFoundException("Abonnement introuvable"));
     }
 
 
@@ -55,7 +57,8 @@ public class AbonnementService {
         Abonnement abonnement = abonnementRepository.save(new Abonnement(eleve, formule));
 
         matieres.forEach(matiere -> {
-            abonnementMatiereRepository.save(new AbonnementMatiere(abonnement, matiere));
+            AbonnementMatiere savedAbonnementMatiere = abonnementMatiereRepository.save(new AbonnementMatiere(abonnement, matiere));
+            abonnement.ajouterMatiere(savedAbonnementMatiere);
         });
 
         return abonnement;
@@ -81,15 +84,15 @@ public class AbonnementService {
     }
 
 
-    private Eleve findEleveById(Long id) {
+    public Eleve findEleveById(Long id) {
         return eleveRepository.findById(id)
-                .orElseThrow(() -> new IllegalArgumentException("Eleve introuvable !"));
+                .orElseThrow(() -> new ResourceNotFoundException("Élève introuvable"));
     }
 
 
     private Formule findFormuleById(Long id) {
         return formuleRepository.findById(id)
-                .orElseThrow(() -> new IllegalArgumentException("Formule introuvable !"));
+                .orElseThrow(() -> new ResourceNotFoundException("Formule introuvable"));
     }
 
 
@@ -98,7 +101,7 @@ public class AbonnementService {
                 .findByEleveAndStatus(eleve, StatutAbonnement.ACTIF)
                 .isPresent();
         if (abonnementActifExiste) {
-            throw new IllegalStateException("Il y a déjà un abonnement actif !");
+            throw new BusinessRuleException("Il y a déjà un abonnement actif");
         }
     }
 
@@ -120,7 +123,7 @@ public class AbonnementService {
 
     private Matiere getEtValiderMatiere(Long matiereId, Eleve eleve) {
         Matiere matiere = matiereRepository.findById(matiereId)
-                .orElseThrow(() -> new IllegalArgumentException("Matiere introuvable : "+ matiereId));
+                .orElseThrow(() -> new ResourceNotFoundException("Matière introuvable"));
 
         boolean appartientALaClasseDeEleve = matiere.getClasse()
                 .getId().equals(eleve.getClasse().getId());
@@ -144,7 +147,7 @@ public class AbonnementService {
     private void verifierAbonnementEstEnAttentePaiement(Abonnement abonnement) {
         boolean abonnementEstEnAttente = abonnement.getStatus().equals(StatutAbonnement.EN_ATTENTE_PAIEMENT);
         if (!abonnementEstEnAttente) {
-            throw new IllegalStateException("Abonnement déjà payé !");
+            throw new BusinessRuleException("Abonnement déjà payé");
         }
     }
 

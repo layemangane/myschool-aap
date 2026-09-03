@@ -6,19 +6,17 @@ import lombok.Setter;
 
 @Entity
 @Getter
+@Setter
 public class Video {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Setter
     private String titre;
 
-    @Setter
     private int dureeMinutes;
 
-    @Setter
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "chapitre_id")
     private Chapitre chapitre;

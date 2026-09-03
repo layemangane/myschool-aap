@@ -1,0 +1,9 @@
+spring:
+  datasource:
+    url: ${DEV_DATABASE_URL:jdbc:postgresql://myschool-db:5432/myschool_db}
+    username: ${DATABASE_USERNAME:myschool}
+    password: ${DATABASE_PASSWORD:passer123}
+  jpa:
+    hibernate:
+      ddl-auto: update
+    show-sql: true

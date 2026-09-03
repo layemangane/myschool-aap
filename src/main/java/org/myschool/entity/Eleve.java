@@ -9,26 +9,7 @@ import java.util.Set;
 
 @Entity
 @Getter
-public class Eleve {
-
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
-
-    @Setter
-    private String nom;
-
-    @Setter
-    @Column(unique = true, nullable = false)
-    private String email;
-
-    @Setter
-    @Column(nullable = false)
-    private String motDePasse;
-
-    @Setter
-    @Enumerated(EnumType.STRING)
-    private Role role;
+public class Eleve extends Utilisateur {
 
     @Setter
     @ManyToOne(fetch = FetchType.LAZY)
@@ -39,14 +20,17 @@ public class Eleve {
     @OneToMany(mappedBy = "eleve")
     private Set<Abonnement> abonnements;
 
-    public Eleve() {
+    public Eleve(String nom, String email, String motDePasse, Classe classe) {
+        super(nom, email, motDePasse);
+        this.classe = classe;
     }
 
-    public Eleve(String nom, String email, Classe classe, String motDePasse, Role role) {
-        this.nom = nom;
-        this.email = email;
-        this.classe = classe;
-        this.motDePasse = motDePasse;
-        this.role = role;
+    public Eleve() {
+
+    }
+
+    @Override
+    public Role getRole() {
+        return Role.ELEVE;
     }
 }

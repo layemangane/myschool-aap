@@ -8,30 +8,28 @@ import java.util.List;
 
 @Entity
 @Getter
+@Setter
 public class Matiere {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Setter
     private String nom;
 
-    @Setter
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "classe_id")
     private Classe classe;
 
-    @Setter
     @OneToMany(mappedBy = "matiere")
     private List<Chapitre> chapitres;
 
-    @Setter
     @OneToMany(mappedBy = "matiere")
     private List<AbonnementMatiere> abonnementMatieres;
 
-    @Setter
     private boolean estGratuite;
+
+    private boolean active = true;
 
     public Matiere() {
     }

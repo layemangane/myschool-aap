@@ -1,0 +1,28 @@
+### POST request for register
+POST http://localhost:8080/api/auth/inscription
+Content-Type: application/json
+
+{
+    "nom": "Abdoulaye Mangane",
+    "email": "mangane.laye@gmail.com",
+     "motDePasse": "passer123",
+     "classeId": 2
+}
+
+### POST request for authentication
+POST http://localhost:8080/api/auth/connexion
+Content-Type: application/json
+
+{
+  "email": "mangane.laye@gmail.com",
+  "motDePasse": "passer123"
+}
+
+### POST request for abonnement
+POST http://localhost:8080/api/abonnements
+Content-Type: application/json
+
+{
+  "formuleId": 1,
+  "matiereIds": [1, 2]
+}

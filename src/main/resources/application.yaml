@@ -1,17 +1,8 @@
 spring:
-  # Application
   application:
     name: myschool
-  # Datasource
-  datasource:
-    url: jdbc:postgresql://localhost:5432/myschool_db
-    username: myschool
-    password: passwordForMyschool
-  # JPA
-  jpa:
-    hibernate:
-      ddl-auto: update
-    show-sql: true
-# Server
+  profiles:
+    default: prod
+
 server:
-  port: 8080
+  port: ${PORT:8080}

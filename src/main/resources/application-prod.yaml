@@ -1,0 +1,9 @@
+spring:
+  datasource:
+    url: ${PROD_DATABASE_URL:jdbc:postgresql://host.docker.internal:5433/myschool_db}
+    username: ${DATABASE_USERNAME:myschool}
+    password: ${DATABASE_PASSWORD:passer123}
+  jpa:
+    hibernate:
+      ddl-auto: update
+    show-sql: true

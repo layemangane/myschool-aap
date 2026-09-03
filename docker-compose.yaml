@@ -2,29 +2,45 @@
 services:
   myschool-db:
     image: postgres:18
+    profiles: ["dev"]
     environment:
-      POSTGRES_DB: myschool_db
-      POSTGRES_USER: myschool
-      POSTGRES_PASSWORD: passwordForMyschool
+      POSTGRES_DB: ${DEV_DATABASE_URL}
+      POSTGRES_USER: ${DATABASE_USERNAME}
+      POSTGRES_PASSWORD: ${DATABASE_PASSWORD}
     ports:
       - "5432:5432"
     volumes:
       - postgres_myschool_data:/var/lib/postgresql
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U myschool -d myschool_db"]
+      interval: 5s
+      timeout: 5s
+      retries: 10
 
-  myschool-app:
+  myschool-app-dev:
     build: .
+    profiles: ["dev"]
     ports:
       - "8080:8080"
     environment:
-      SPRING_DATASOURCE_URL: jdbc:postgresql://myschool-db:5432/myschool_db
-      SPRING_DATASOURCE_USERNAME: myschool
-      SPRING_DATASOURCE_PASSWORD: passwordForMyschool
+      SPRING_PROFILES_ACTIVE: dev
     depends_on:
-      - myschool-db
+      myschool-db:
+        condition: service_healthy
     develop:
       watch:
         - action: rebuild
           path: .
 
+  myschool-app-prod:
+    build: .
+    profiles: ["prod"]
+    ports:
+      - "8080:8080"
+    environment:
+      SPRING_PROFILES_ACTIVE: prod
+      DATABASE_URL: ${PROD_DATABASE_URL:?La variable DATABASE_URL est obligatoire pour le profil prod}
+      DATABASE_USERNAME: ${DATABASE_USERNAME:?La variable DATABASE_USERNAME est obligatoire pour le profil prod}
+      DATABASE_PASSWORD: ${DATABASE_PASSWORD:?La variable DATABASE_PASSWORD est obligatoire pour le profil prod}
 volumes:
   postgres_myschool_data:

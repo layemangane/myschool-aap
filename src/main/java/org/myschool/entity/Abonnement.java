@@ -6,6 +6,7 @@ import lombok.Setter;
 import org.myschool.enumeration.StatutAbonnement;
 
 import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.List;
 
 @Entity
@@ -35,7 +36,7 @@ public class Abonnement {
 
     @Setter
     @OneToMany(mappedBy = "abonnement")
-    private List<AbonnementMatiere> abonnementMatieres;
+    private List<AbonnementMatiere> abonnementMatieres = new ArrayList<>();
 
     @OneToOne(mappedBy = "abonnement")
     private Paiement paiement;
@@ -52,6 +53,10 @@ public class Abonnement {
         this.eleve = eleve;
         this.formule = formule;
         this.status = StatutAbonnement.EN_ATTENTE_PAIEMENT;
+    }
+
+    public void ajouterMatiere(AbonnementMatiere abonnementMatiere) {
+        this.abonnementMatieres.add(abonnementMatiere);
     }
 
 }

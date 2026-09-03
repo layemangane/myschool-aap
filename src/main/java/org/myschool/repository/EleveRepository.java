@@ -13,4 +13,6 @@ public interface EleveRepository extends JpaRepository<Eleve, Long> {
     Optional<Eleve> findByEmail(String email);
 
     List<Eleve> findByRole(Role role);
+
+    boolean existsByEmail(String email);
 }

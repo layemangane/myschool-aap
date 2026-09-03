@@ -15,4 +15,6 @@ public interface VideoRepository extends JpaRepository<Video, Long> {
     List<Video> findByDureeMinutesGreaterThan(int dureeMinutes);
 
     List<Video> findByDureeMinutesLessThan(int dureeMinutes);
+
+    List<Video> findVideosByChapitreId(Long chapitreId);
 }
